@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <title>adkwebmaps</title>
+
+<!-- CORE CSS -->
+        <link href="lib/bootstrap-3.1.1/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+        <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+        <link href="lib/leaflet-0.7.2/leaflet.css" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" href="lib/Leaflet-MiniMap-master/src/Control.MiniMap.css">
+        <link href="lib/MarkerCluster.css" rel="stylesheet" type="text/css">
+        <link href="lib/MarkerCluster.Default.css" rel="stylesheet" type="text/css">
+        <link href="lib/leaflet-locatecontrol-gh-pages/src/L.Control.Locate.css" rel="stylesheet" type="text/css">
+        <link href="lib/leaflet-sidebar/L.Control.Sidebar.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/main.css" rel="stylesheet" type="text/css">
+        <link href="assets/css/sidebar.css" rel="stylesheet" type="text/css">
+
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+    </head>
+
+    <body>
+        <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+            <div class="navbar-header pull right">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand hidden-xs" href="#">ADKwebmaps</a>
+                <a class="navbar-brand visible-xs" href="#">Hiking & Climbing Map</a>
+            </div>
+            <div class="navbar-collapse collapse pull-right">
+                <a class="navbar-brand hidden-xs" href="index.html">Hiking & Climbing Map</a>
+            </div>           
+           
+            <div class="navbar-collapse collapse pull-left">
+           
+<!--                 <form class="navbar-form navbar-right" role="search">
+                    <div class="form-group has-feedback navbar-right">
+                        <input id="searchbox" type="text" placeholder="Search" class="form-control">
+                        <span id="searchicon" class="fa fa-search form-control-feedback"></span>
+                    </div>
+                </form> -->
+                 <ul class="nav navbar-nav">
+                 <!--   <li class="dropdown">  
+                      <a href="#"  
+                            class="dropdown-toggle"  
+                            data-toggle="dropdown">  
+                            <i class="fa fa-globe" style="color: white" ></i>&nbsp;&nbsp;Maps  
+                            <b class="caret"></b>  
+                      </a>  
+                      <ul class="dropdown-menu">  
+                        <li><a href="recreationMap.php">Outdoor Recreation</a></li>  
+                        <li><a href="attractionsMap.php">Attractions</a></li> 
+                        <li><a href="finchpruynMap.php">Finch Purchase</a></li> 
+                        <li><a href="cellCoverageMap.php">Cell Service</a></li>
+                        <li><a href="hamletViz.php">Hamlets Visualization</a></li> 
+                      </ul>  
+                    </li>
+                    <li class="dropdown">
+                        <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench" style="color: white"></i>&nbsp;&nbsp;Tools <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="map.fitBounds(blueline.getBounds()); return false;"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
+                        </ul> 
+                    </li>                   
+                    <li><a href="#hamletVizAboutModal" data-toggle="modal"><i class="fa fa-info-circle" style="color: white"></i>&nbsp;&nbsp;Info</a></li>
+                    <li><a href="#helpModal" data-toggle="modal"><i class="fa fa-question-circle" style="color: white"></i>&nbsp;&nbsp;Help</a></li>-->
+
+                    <li class="dropdown">
+                        <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench" style="color: white"></i>&nbsp;&nbsp;Tools <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="map.fitBounds(county.getBounds()); return false;"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
+                        </ul> 
+                    </li> 
+                    <li>
+                        <a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" onclick="sidebar.toggle(); return false;"><i class="fa fa-list" style="color: white"></i>&nbsp;&nbsp;Sidebar</a>
+                    </li>
+                    <li>
+                        <a href="index.html"><p class="navbar-text navbar-subheading visible-xs">ADKwebmaps</p></a>
+                    </li>   
+                    
+                </ul> 
+            </div><!--/.navbar-collapse -->
+        </div>
+    <div class="row" id="container">
+        <div class="col-sm-8 col-lg-8" id="map">
+            <div id="loading" style="display: block;">
+                <div class="loading-indicator">
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar progress-bar-info" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-4 col-lg-4" id="sidebar" style="padding: 10px; overflow: auto;">
+             <h2>Sidebar</h2>
+            <h5 class="visible-xs">(note:close sidebar to view map)</h5>             <div class="panel panel-default">
+                <div class="panel-heading accordion-toggle">
+                    <a class="accordion-toggle" data-toggle="collapse" href="#searchbar">
+                        Search
+                    </a>
+                </div>
+
+                <div id="searchbar" class="panel-collapse collapse in">
+                    <div class="panel-body" style="padding: 10px 15px;">
+                        <div class="input-group well well-sm" style="margin-bottom: 10px;">
+                            <input id="searchbox" type="text" class="form-control" placeholder="Type your search here">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        </div>
+                        Search for trails, towns, rock climbing areas, summits or DEC campsites.
+                    </div>
+                </div>
+            </div>            
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_" href="#about">
+                About this Map
+            </a>
+        </div>
+        <div id="about" class="panel-collapse collapse in">
+            <div class="panel-body" style="padding: 10px 15px;">   
+                This map shows some recreational assets.
+            </div>
+        </div>
+    </div>        
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_" href="#mapLayers">
+                Map Layers
+            </a>
+        </div>
+        <div id="mapLayers" class="panel-collapse collapse">
+            <div class="panel-body" style="padding: 10px 15px;">   
+                <img src="assets/img/apaLandClassLegend.jpg">
+            </div>
+        </div>
+    </div>
+        </div>
+
+    </div>
+<!--     <div class="row" id="container">
+        <div class="col-sm-9 col-lg-9" id="map">
+            <div id="loading" style="display: block;">
+                <div class="loading-indicator">
+                    <div class="progress progress-striped active">
+                        <div class="progress-bar progress-bar-info" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="sidebar" "col-sm-3 col-lg-3">
+            <!-- <h2>Sidebar</h2>
+            <h5 class="visible-xs">(note:close sidebar to view map)</h5> -->
+
+<!--             <div class="panel panel-default">
+                <div class="panel-heading accordion-toggle">
+                    <a class="accordion-toggle" data-toggle="collapse" href="#searchbar">
+                        Search
+                    </a>
+                </div>
+
+                <div id="searchbar" class="panel-collapse collapse in">
+                    <div class="panel-body" style="padding: 10px 15px;">
+                        <div class="input-group well well-sm" style="margin-bottom: 10px;">
+                            <input id="searchbox" type="text" class="form-control" placeholder="Type your search here">
+                            <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                        </div>
+                        Search for trails, towns, rock climbing areas, summits or DEC campsites.
+                    </div>
+                </div>
+            </div>            
+
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_" href="#about">
+                About this Map
+            </a>
+        </div>
+        <div id="about" class="panel-collapse collapse in">
+            <div class="panel-body" style="padding: 10px 15px;">   
+                This map shows some recreational assets.
+            </div>
+        </div>
+    </div>        
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion_" href="#mapLayers">
+                Map Layers
+            </a>
+        </div>
+        <div id="mapLayers" class="panel-collapse collapse">
+            <div class="panel-body" style="padding: 10px 15px;">   
+                <img src="assets/img/apaLandClassLegend.jpg">
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+    </div> --> -->
+<!--         <div id="map"></div>
+
+        <div id="sidebar">
+            <h4 style="padding-bottom: 3px;"><b>List of Counties goes here...</b></h4> 
+            <div id="list"></div>              
+        </div> -->
+
+
+
+
+
+
+
+
+<!-- CORE JS -->
+        <script type="text/javascript" src="lib/jquery-1.11.0.min.js"></script>
+        <script type="text/javascript" src="lib/bootstrap-3.1.1/dist/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="lib/typeahead/typeahead.bundle.min.js"></script>
+        <script type="text/javascript" src="lib/leaflet-0.7.2/leaflet.js"></script>
+        <script type="text/javascript" src="lib/leaflet-sidebar/L.Control.Sidebar.js"></script>
+        <script type="text/javascript" src="lib/leaflet.markercluster.js"></script>
+        <script src="http://d3js.org/topojson.v1.min.js"></script>
+        <!-- <script type="text/javascript" src="lib/jquery.form.js"></script>-->
+        <script type="text/javascript" src="lib/leaflet-locatecontrol-gh-pages/src/L.Control.Locate.js"></script>
+        <script src="lib/Leaflet-MiniMap-master/src/Control.MiniMap.js" type="text/javascript"></script>
+        <script src="lib/esri-leaflet.js" type="text/javascript"></script>
+        <script type="text/javascript" src="assets/js/icons.js"></script>
+        <script type="text/javascript" src="assets/js/leanto.js"></script>
+        <script type="text/javascript" src="assets/js/campground.js"></script>
+        <script type="text/javascript" src="assets/js/boatLaunch.js"></script>
+        <script type="text/javascript" src="assets/js/parking.js"></script>
+        <script type="text/javascript" src="assets/js/overlays.js"></script>
+        <script type="text/javascript" src="assets/js/adktrailPts.js"></script>
+        <script type="text/javascript" src="assets/js/places.js"></script>
+        <script type="text/javascript" src="assets/js/summit.js"></script>
+        <script type="text/javascript" src="assets/js/recreationMap.js"></script>
+
+
+
+
+    </body>
+</html>
